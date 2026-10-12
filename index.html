@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Szalka AutoTuning & Szerviz</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Fix, dinamikus Navigáció -->
+    <header id="fejlec">
+        <div class="logo">Szalka <span>Tuning</span></div>
+        <nav>
+            <ul>
+                <li><a href="#tuning">Teljesítmény</a></li>
+                <li><a href="#gumi">Gumiabroncsok</a></li>
+                <li><a href="#fek">Fékrendelés</a></li>
+                <li><a href="#arajanlat">Árkalkulátor</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ÚJ: Hero Szekció (Kép + Szöveg) -->
+    <section id="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>Korrekt Szerviz, Fölösleges Körök Nélkül</h1>
+            <p>Gyors diagnosztika, megbízható teljesítménynövelés és prémium alkatrészek Mátészalkán. Amit megbeszélünk, ahhoz tartjuk magunkat.</p>
+            <a href="#tuning" class="cta-btn">Szolgáltatásaink</a>
+        </div>
+    </section>
+
+    <main>
+        <!-- Teljesítménynövelés szekció -->
+        <section id="tuning" class="card animate-on-scroll">
+            <h2>Motor Teljesítménynövelés (HP és Nm)</h2>
+            <p>Minden feltüntetett ár tartalmazza a mátészalkai szervizünk munkadíját is!</p>
+            <ul>
+                <li><strong>Stage 1 (Chiptuning):</strong> Szoftveres optimalizálás (+15-20% HP). <em>Ár: kb. 95.000 Ft</em></li>
+                <li><strong>Stage 2 (Kipufogó + Szívósor):</strong> Hardveres módosítások. <em>Ár: kb. 250.000 Ft</em></li>
+                <li><strong>Turbó kialakítás/csere:</strong> Nagyobb turbófeltöltő beépítése, egyedi programozás. <em>Ár: kb. 450.000 Ft -tól</em></li>
+            </ul>
+        </section>
+
+        <!-- Gumiabroncs ajánlás és kereső szekció -->
+        <section id="gumi" class="card animate-on-scroll">
+            <h2>Gumiabroncsok és Méret Kereső</h2>
+            <div class="gumi-grid">
+                <div class="gumi-item">
+                    <h3>Nyári gumik</h3>
+                    <p>
+                        <a href="https://www.michelin.hu/" target="_blank">Michelin Pilot Sport 4</a><br>
+                        <a href="https://www.continental.hu/" target="_blank">Continental SportContact 7</a>
+                    </p>
+                </div>
+                <div class="gumi-item">
+                    <h3>Téli gumik</h3>
+                    <p>
+                        <a href="https://www.bridgestone.hu/" target="_blank">Bridgestone Blizzak LM005</a><br>
+                        <a href="https://www.hankooktire.com/hu/" target="_blank">Hankook Winter i*cept</a>
+                    </p>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 20px;">Gumiabroncs érdeklődés</h3>
+            <form id="gumiForm">
+                <label>Szélesség (Pontosan 3 szám, pl. 205):</label>
+                <input type="text" id="gumiSzelesseg" placeholder="205" maxlength="3">
+                
+                <label>Magasság/Profil (Pontosan 2 szám, pl. 55):</label>
+                <input type="text" id="gumiMagassag" placeholder="55" maxlength="2">
+
+                <label>Átmérő (Pontosan 2 szám, pl. 16):</label>
+                <input type="text" id="gumiAtmero" placeholder="16" maxlength="2">
+
+                <button type="button" onclick="gumiEllenorzes()">Méret ellenőrzése</button>
+            </form>
+            <p id="gumiUzenet"></p>
+        </section>
+
+        <!-- Fékalkatrész rendelés szekció -->
+        <section id="fek" class="card animate-on-scroll">
+            <h2>Fékrendszer Alkatrész Megrendelés</h2>
+            <p>Válaszd ki a márkát és a szükséges alkatrészeket (az árak tartalmazzák a beszerelés díját is)!</p>
+            <form id="rendelesForm">
+                <label for="nev">Teljes név:</label>
+                <input type="text" id="nev" placeholder="Kovács János">
+
+                <label for="auto">Autó márka és típus (pl. BMW E90 320d):</label>
+                <input type="text" id="auto" placeholder="Kezdődjön betűvel!">
+
+                <label for="fekMarka">Kívánt márka:</label>
+                <select id="fekMarka">
+                    <option value="Brembo">Brembo (Sport)</option>
+                    <option value="ATE">ATE (Gyári minőség)</option>
+                    <option value="Textar">Textar (Prémium)</option>
+                </select>
+
+                <label>Szükséges alkatrészek:</label>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="f_tarcsa" value="25000"> Féktárcsa (25.000 Ft/db)<br>
+                    <input type="checkbox" id="f_betet" value="15000"> Fékbetét (15.000 Ft/szett)<br>
+                    <input type="checkbox" id="f_nyereg" value="40000"> Féknyereg (40.000 Ft/db)<br>
+                    <input type="checkbox" id="f_folyadek" value="10000"> Fékfolyadék csere (10.000 Ft)
+                </div>
+
+                <button type="button" onclick="fekRendeles()">Megrendelés elküldése</button>
+            </form>
+            <p id="rendelesUzenet"></p>
+        </section>
+
+        <!-- Árajánlat kalkulátor -->
+        <section id="arajanlat" class="card animate-on-scroll">
+            <h2>Komplex Árajánlat Kalkulátor</h2>
+            <p>Jelöld be azokat a szolgáltatásokat, amelyeket igénybe szeretnél venni!</p>
+            <form id="kalkulatorForm">
+                <div class="checkbox-group">
+                    <input type="checkbox" class="szolgaltatas_ar" value="95000"> Chiptuning Stage 1 (95.000 Ft)<br>
+                    <input type="checkbox" class="szolgaltatas_ar" value="250000"> Kipufogó és Szívósor Stage 2 (250.000 Ft)<br>
+                    <input type="checkbox" class="szolgaltatas_ar" value="450000"> Turbó csere/beépítés (450.000 Ft)<br>
+                    <input type="checkbox" class="szolgaltatas_ar" value="16000"> Gumiszerelés és centírozás (4 db) (16.000 Ft)<br>
+                    <input type="checkbox" class="szolgaltatas_ar" value="30000"> Kötelező szerviz: Olaj + Szűrők cseréje (30.000 Ft)<br>
+                </div>
+                <button type="button" onclick="arKalkulalas()">Végösszeg kiszámítása</button>
+            </form>
+            <h3 id="kalkulaltAr"></h3>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Szalka AutoTuning. Készítette: Kovács Eduárd, Gráma Bence.</p>
+    </footer>
+
+    <button id="felGomb" onclick="felUgras()">↑</button>
+
+    <script src="script.js"></script>
+</body>
+</html>
