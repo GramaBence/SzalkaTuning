@@ -1,140 +1,1015 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="hu">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Szalka AutoTuning & Szerviz</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<title>Szalka AutoTuning & Szerviz</title>
+<meta name="description" content="Autószerviz és teljesítménynövelés Mátészalkán: chiptuning, Stage 2, turbó, gumiabroncs méretellenőrzés, fékalkatrész megrendelés és árkalkulátor.">
+<meta property="og:title" content="Szalka AutoTuning & Szerviz">
+<meta property="og:description" content="Gyors diagnosztika, megbízható teljesítménynövelés és prémium alkatrészek Mátészalkán.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="hu_HU">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230F1215'/%3E%3Cpath d='M5 22a11 11 0 0 1 22 0' fill='none' stroke='%23E8A93A' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M16 22l6-8' stroke='%23E8E8E8' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"AutoRepair","name":"Szalka AutoTuning & Szerviz","address":{"@type":"PostalAddress","addressLocality":"Mátészalka","addressCountry":"HU"},"description":"Autószerviz, chiptuning és teljesítménynövelés Mátészalkán."}
+</script>
+<style>
+/* Layout: dark workshop. Text-led hero beside a live dyno chart, then ruled sections with
+   one working tool each (tire check, brake order, quote). Amber is the only accent. */
+:root{
+  --bg:#0F1215; --surface:#171B20; --surface-2:#1E2329; --line:#2B323A;
+  --fg:#E9EBED; --muted:#9AA4AF; --accent:#E8A93A; --accent-ink:#14100A;
+  --good:#5BC08A; --bad:#F0766F; --stock:#7C8794;
+  --font-display:"Barlow Condensed","Arial Narrow",Impact,sans-serif;
+  --font-body:"Barlow",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --radius:6px; --gutter:max(16px,env(safe-area-inset-left,0px));
+  color-scheme:dark;
+}
+@media (prefers-color-scheme:light){
+  :root{
+    --bg:#F3F4F5; --surface:#FFFFFF; --surface-2:#ECEEF0; --line:#D4D8DC;
+    --fg:#14181C; --muted:#56616C; --accent:#9A5A00; --accent-ink:#FFFFFF;
+    --good:#16794A; --bad:#B3261E; --stock:#7A8591;
+    color-scheme:light;
+  }
+}
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font:400 1rem/1.6 var(--font-body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--font-display);font-weight:600;line-height:1.05;letter-spacing:.01em;margin:0;text-wrap:balance}
+h1{font-size:clamp(2.6rem,7vw,4.6rem);text-transform:uppercase}
+h2{font-size:clamp(1.9rem,4.5vw,2.8rem);text-transform:uppercase}
+h3{font-size:1.35rem}
+p{margin:0}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:3px}
+.wrap{max-width:1120px;margin-inline:auto}
+.skip{position:absolute;left:-999px;top:8px;background:var(--accent);color:var(--accent-ink);padding:10px 14px;border-radius:var(--radius);z-index:100}
+.skip:focus{left:8px}
+.mono{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+.eyebrow{font:500 .78rem/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.muted{color:var(--muted)}
+
+/* header */
+.site-header{position:sticky;top:0;z-index:20;margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)));
+  padding-inline:max(16px,env(safe-area-inset-left,0px));background:var(--bg);border-bottom:1px solid var(--line)}
+.site-header .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px 24px;flex-wrap:wrap;padding-block:12px}
+.brand{font:700 1.55rem/1 var(--font-display);text-transform:uppercase;letter-spacing:.04em;text-decoration:none;display:flex;align-items:baseline;gap:8px}
+.brand small{font:500 .72rem/1 var(--font-mono);color:var(--muted);letter-spacing:.12em}
+.nav{display:flex;gap:4px;overflow-x:auto;max-width:100%;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav a{padding:8px 12px;text-decoration:none;font-weight:500;font-size:.95rem;color:var(--muted);border-radius:var(--radius);white-space:nowrap}
+.nav a:hover{color:var(--fg);background:var(--surface-2)}
+
+/* hero */
+.hero{padding-block:56px 72px;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:48px;align-items:center}
+.hero-copy{display:flex;flex-direction:column;gap:22px;align-items:flex-start}
+.hero-copy .lead{font-size:1.15rem;color:var(--muted);max-width:46ch}
+.cta-row{display:flex;flex-wrap:wrap;gap:12px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 22px;border-radius:var(--radius);
+  font:600 1rem/1 var(--font-body);text-decoration:none;border:1px solid transparent;cursor:pointer;transition:transform .15s,background .15s}
+.btn-primary{background:var(--accent);color:var(--accent-ink)}
+.btn-primary:hover{transform:translateY(-1px)}
+.btn-ghost{border-color:var(--line);background:transparent;color:var(--fg)}
+.btn-ghost:hover{background:var(--surface-2)}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+
+.dyno{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.dyno-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
+.dyno-head h2{font-size:1.5rem}
+.dyno-input{display:flex;align-items:center;gap:10px}
+.dyno-input label{font-size:.85rem;color:var(--muted)}
+.dyno-input input{width:92px}
+.dyno svg{width:100%;height:auto;display:block}
+.dyno .axis{fill:var(--muted);font:400 12px var(--font-mono)}
+.dyno .grid{stroke:var(--line);stroke-width:1}
+.dyno .c-stock{fill:none;stroke:var(--stock);stroke-width:2.5}
+.dyno .c-band{fill:var(--accent);opacity:.22}
+.dyno .c-s1{fill:none;stroke:var(--accent);stroke-width:2.5}
+.dyno .peak{fill:var(--fg);font:500 13px var(--font-mono)}
+.legend{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:.88rem;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.legend i{width:18px;height:3px;border-radius:2px;display:inline-block}
+.dyno-result{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.dyno-result strong{font:600 2rem/1 var(--font-display)}
+.fineprint{font-size:.8rem;color:var(--muted)}
+
+/* sections */
+section.block{padding-block:72px;border-top:1px solid var(--line);scroll-margin-top:60px}
+.block-head{display:flex;flex-direction:column;gap:12px;margin-bottom:36px;max-width:62ch}
+.block-head p{color:var(--muted)}
+.callout{border-left:3px solid var(--accent);background:var(--surface);padding:14px 18px;border-radius:0 var(--radius) var(--radius) 0;margin-bottom:28px}
+
+.stages{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.stages li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 24px;padding:24px 0;border-bottom:1px solid var(--line);align-items:baseline}
+.stages .desc{color:var(--muted);grid-column:1}
+.stages .price{grid-column:2;grid-row:1 / span 2;font:500 1.25rem/1.2 var(--font-mono);text-align:right;white-space:nowrap}
+.stages .price small{display:block;font-size:.72rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:40px;align-items:start}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:24px;min-width:0}
+.panel h3{margin-bottom:16px}
+.tire-list{list-style:none;margin:0 0 24px;padding:0}
+.tire-list:last-child{margin-bottom:0}
+.tire-list li+li{border-top:1px solid var(--line)}
+.tire-list a{display:flex;justify-content:space-between;gap:12px;padding:12px 0;text-decoration:none}
+.tire-list a:hover span:first-child{text-decoration:underline}
+.tire-list a span:last-child{color:var(--muted);font-size:.85rem;white-space:nowrap}
+.sub{font:500 .78rem/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+
+/* forms */
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field>label,.legend-l{font-size:.88rem;font-weight:500}
+input[type=text],input[type=number],select{width:100%;min-height:44px;padding:0 12px;border-radius:var(--radius);
+  border:1px solid var(--line);background:var(--surface-2);color:var(--fg);font:400 1rem var(--font-body)}
+input.mono{font-family:var(--font-mono)}
+select{padding-right:8px}
+input:disabled,select:disabled{opacity:.45}
+.size-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.size-block+.size-block{margin-top:18px}
+.size-block .hint{font-size:.8rem;color:var(--muted)}
+.error{color:var(--bad);font-size:.9rem;min-height:1.4em}
+.ok{color:var(--good)}
+fieldset{border:0;padding:0;margin:0;min-width:0}
+legend{padding:0}
+.stack{display:flex;flex-direction:column;gap:18px}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.brands{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.brands label{display:flex;flex-direction:column;gap:2px;padding:12px;border:1px solid var(--line);border-radius:var(--radius);cursor:pointer;background:var(--surface-2)}
+.brands label:has(input:checked){border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.brands input{position:absolute;opacity:0;pointer-events:none}
+.brands label:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:2px}
+.brands b{font-weight:600}
+.brands span{font-size:.82rem;color:var(--muted)}
+.opts{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.opt{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;align-items:center;gap:6px 14px;padding:12px 14px;background:var(--surface-2)}
+.opt+.opt{border-top:1px solid var(--line)}
+.opt input[type=checkbox]{width:20px;height:20px;accent-color:var(--accent)}
+.opt .name{font-weight:500}
+.opt .name small{display:block;color:var(--muted);font-weight:400;font-size:.82rem}
+.opt .p{font:400 .92rem var(--font-mono);color:var(--muted);white-space:nowrap}
+.opt select{width:64px;min-height:36px}
+.opt.simple{grid-template-columns:auto minmax(0,1fr) auto}
+.opt label.row{display:contents;cursor:pointer}
+
+.summary{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:24px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.summary ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.summary li{display:flex;justify-content:space-between;gap:16px;font-size:.95rem}
+.summary li span:last-child{font-family:var(--font-mono);white-space:nowrap}
+.summary .empty{color:var(--muted)}
+.total{display:flex;justify-content:space-between;align-items:baseline;gap:12px;border-top:1px solid var(--line);padding-top:14px}
+.total strong{font:600 2rem/1 var(--font-display);white-space:nowrap}
+.actions{display:flex;flex-wrap:wrap;gap:10px}
+.result-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-top:6px}
+.result-grid div{background:var(--surface-2);padding:10px 12px}
+.result-grid dt{font-size:.76rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.result-grid dd{margin:2px 0 0;font:500 1.05rem var(--font-mono)}
+.result-grid.cols-1{grid-template-columns:1fr}
+.result-box{margin-top:20px;display:flex;flex-direction:column;gap:12px}
+.verdict{padding:12px 14px;border-radius:var(--radius);background:var(--surface-2);border-left:3px solid var(--accent)}
+
+footer{border-top:1px solid var(--line);padding-block:40px 56px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:20px;color:var(--muted);font-size:.92rem}
+footer a{color:var(--fg)}
+.contact-line{display:flex;flex-direction:column;gap:4px}
+
+.dyno-controls{display:flex;flex-wrap:wrap;gap:12px}
+.dyno-controls .field{min-width:0}
+.dyno-controls .num{display:flex;align-items:center;gap:8px}
+.dyno-controls .num input{width:96px}
+.dyno-controls select{min-width:190px}
+.tips{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.tips p{padding:10px 14px;border-left:3px solid var(--accent);background:var(--surface-2);border-radius:0 var(--radius) var(--radius) 0;font-size:.92rem}
+.tips:empty{display:none}
+.hint{font-size:.82rem;color:var(--muted)}
+.notes{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:6px}
+.notes li::marker{color:var(--accent)}
+.field-wide{grid-column:1 / -1}
+input[aria-invalid="true"],select[aria-invalid="true"]{border-color:var(--bad);box-shadow:inset 0 0 0 1px var(--bad)}
+.dyno svg.stale{opacity:.3}
+.to-top{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:30;
+  width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:var(--accent);color:var(--accent-ink);
+  font:700 1.3rem/1 var(--font-body);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.35)}
+.to-top:hover{transform:translateY(-2px)}
+.data-status{display:flex;flex-wrap:wrap;align-items:center;gap:12px 16px;margin-top:24px;padding:14px 18px;border:1px solid var(--bad);border-radius:var(--radius);background:var(--surface)}
+.data-status p{flex:1 1 280px;margin:0}
+.stages li.msg,.makes li.msg{display:block}
+.makes{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.makes li{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1fr) minmax(0,1.6fr);gap:8px 32px;padding:24px 0;border-bottom:1px solid var(--line);align-items:baseline}
+.makes h3{font-size:1.9rem;text-transform:uppercase}
+.makes .models{font:400 .88rem/1.5 var(--font-mono);color:var(--muted)}
+.makes .know{margin:0}
+@media (max-width:900px){
+  .makes li{grid-template-columns:minmax(0,1fr);gap:6px}
+  .hero{grid-template-columns:minmax(0,1fr);gap:36px;padding-block:36px 56px}
+  .two{grid-template-columns:minmax(0,1fr);gap:28px}
+}
+@media (max-width:560px){
+  section.block{padding-block:52px}
+  .panel,.summary,.dyno{padding:18px}
+  .form-grid{grid-template-columns:minmax(0,1fr)}
+  .brands{grid-template-columns:minmax(0,1fr)}
+  .stages li{grid-template-columns:minmax(0,1fr)}
+  .stages .price{grid-column:1;grid-row:auto;text-align:left;margin-top:4px}
+  .opt{grid-template-columns:auto minmax(0,1fr) auto}
+  .opt .p{grid-column:2;grid-row:2}
+  .opt select{grid-column:3;grid-row:1 / span 2}
+  .result-grid{grid-template-columns:minmax(0,1fr)}
+  .brand small{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{transition:none!important;animation:none!important}
+}
+</style>
 </head>
 <body>
+<a class="skip" href="#tartalom">Ugrás a tartalomhoz</a>
 
-    <!-- Fix, dinamikus Navigáció -->
-    <header id="fejlec">
-        <div class="logo">Szalka <span>Tuning</span></div>
-        <nav>
-            <ul>
-                <li><a href="#tuning">Teljesítmény</a></li>
-                <li><a href="#gumi">Gumiabroncsok</a></li>
-                <li><a href="#fek">Fékrendelés</a></li>
-                <li><a href="#arajanlat">Árkalkulátor</a></li>
-            </ul>
-        </nav>
-    </header>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Szalka AutoTuning, oldal teteje">Szalka <small>AutoTuning &amp; Szerviz</small></a>
+    <nav class="nav" aria-label="Főmenü">
+      <a href="#tuning">Teljesítmény</a>
+      <a href="#markak">Márkák</a>
+      <a href="#gumi">Gumiabroncsok</a>
+      <a href="#fek">Fékrendelés</a>
+      <a href="#arajanlat">Árkalkulátor</a>
+    </nav>
+  </div>
+</header>
 
-    <!-- ÚJ: Hero Szekció (Kép + Szöveg) -->
-    <section id="hero">
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <h1>Korrekt Szerviz, Fölösleges Körök Nélkül</h1>
-            <p>Gyors diagnosztika, megbízható teljesítménynövelés és prémium alkatrészek Mátészalkán. Amit megbeszélünk, ahhoz tartjuk magunkat.</p>
-            <a href="#tuning" class="cta-btn">Szolgáltatásaink</a>
+<main id="tartalom">
+<div class="wrap" id="top">
+
+  <div class="data-status" id="data-status" role="alert" hidden>
+    <p>Az adatok (árak, szolgáltatások, gumik, márkák) betöltése nem sikerült. Ellenőrizd az internetkapcsolatot, majd próbáld újra. Ha az oldalt közvetlenül a gépedről nyitottad meg, a böngésző letiltja a betöltést, ilyenkor helyi szerverre vagy a GitHub Pages címre van szükség.</p>
+    <button class="btn btn-ghost" type="button" id="data-retry">Újrapróbálás</button>
+  </div>
+
+  <div class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">Mátészalka · Szerviz és teljesítményhangolás</p>
+      <h1>Korrekt szerviz, fölösleges körök nélkül</h1>
+      <p class="lead">Gyors diagnosztika, megbízható teljesítménynövelés és prémium alkatrészek Mátészalkán. Amit megbeszélünk, ahhoz tartjuk magunkat.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#tuning">Szolgáltatásaink</a>
+        <a class="btn btn-ghost" href="#arajanlat">Árajánlat kalkulátor</a>
+      </div>
+    </div>
+
+    <div class="dyno" aria-labelledby="dyno-title">
+      <div class="dyno-head">
+        <div>
+          <p class="eyebrow">Stage 1 becslő</p>
+          <h2 id="dyno-title">Mennyit hoz a chiptuning?</h2>
         </div>
-    </section>
+      </div>
+      <div class="dyno-controls">
+        <div class="field">
+          <label for="dyno-hp">Gyári teljesítmény</label>
+          <div class="num">
+            <input id="dyno-hp" class="mono" type="text" inputmode="numeric" maxlength="3" value="150" autocomplete="off" aria-describedby="dyno-note">
+            <span class="muted">LE</span>
+          </div>
+        </div>
+        <div class="field">
+          <label for="dyno-type">Motor típusa</label>
+          <select id="dyno-type">
+            <option value="turbo">Turbós (benzin vagy dízel)</option>
+            <option value="na">Szívó benzines</option>
+          </select>
+        </div>
+      </div>
+      <svg id="dyno-svg" viewBox="0 0 420 280" role="img" aria-label="Szemléltető teljesítménygörbe gyári és Stage 1 állapotban"></svg>
+      <div class="legend" aria-hidden="true">
+        <span><i style="background:var(--stock)"></i>Gyári</span>
+        <span><i style="background:var(--accent)"></i><span id="dyno-legend">Stage 1 (+15–20%)</span></span>
+      </div>
+      <div class="dyno-result" aria-live="polite">
+        <span class="muted">Várható csúcsteljesítmény:</span>
+        <strong id="dyno-out" class="mono">–</strong>
+      </div>
+      <p class="fineprint" id="dyno-note">A görbe szemléltető, nem mérési eredmény. A tényleges érték motortól, állapottól és üzemanyagtól függ, a pontos számot mérés után adjuk meg.</p>
+    </div>
+  </div>
 
-    <main>
-        <!-- Teljesítménynövelés szekció -->
-        <section id="tuning" class="card animate-on-scroll">
-            <h2>Motor Teljesítménynövelés (HP és Nm)</h2>
-            <p>Minden feltüntetett ár tartalmazza a mátészalkai szervizünk munkadíját is!</p>
-            <ul>
-                <li><strong>Stage 1 (Chiptuning):</strong> Szoftveres optimalizálás (+15-20% HP). <em>Ár: kb. 95.000 Ft</em></li>
-                <li><strong>Stage 2 (Kipufogó + Szívósor):</strong> Hardveres módosítások. <em>Ár: kb. 250.000 Ft</em></li>
-                <li><strong>Turbó kialakítás/csere:</strong> Nagyobb turbófeltöltő beépítése, egyedi programozás. <em>Ár: kb. 450.000 Ft -tól</em></li>
-            </ul>
-        </section>
+  <section class="block" id="tuning" aria-labelledby="tuning-h">
+    <div class="block-head">
+      <p class="eyebrow">Motor teljesítménynövelés (LE és Nm)</p>
+      <h2 id="tuning-h">Három lépcső, egyértelmű árak</h2>
+    </div>
+    <p class="callout"><strong>Minden feltüntetett ár tartalmazza a mátészalkai szervizünk munkadíját is.</strong></p>
+    <ol class="stages" id="stages" style="list-style:none">
+      <li class="msg muted" data-wait>Adatok betöltése…</li>
+    </ol>
+    <div class="panel" style="margin-top:28px">
+      <h3>Hangolás előtt érdemes tudni</h3>
+      <ul class="notes">
+        <li>A motornak hangolás előtt szervizelt, hibamentes állapotban kell lennie: friss olaj, rendben lévő szűrők, hibakód-mentes memória. Ezért érdemes mellé alapszervizt kérni.</li>
+        <li>Nagyobb teljesítmény mellett a kuplung, a fékrendszer és a gumik is jobban terhelődnek, ezeket érdemes együtt átnézetni.</li>
+        <li>Teljesítménynövelés előtt egyeztess a biztosítóddal, és érdeklődj arról, hogy a módosítást át kell-e vezetni a forgalmi engedélyben.</li>
+      </ul>
+    </div>
+  </section>
 
-        <!-- Gumiabroncs ajánlás és kereső szekció -->
-        <section id="gumi" class="card animate-on-scroll">
-            <h2>Gumiabroncsok és Méret Kereső</h2>
-            <div class="gumi-grid">
-                <div class="gumi-item">
-                    <h3>Nyári gumik</h3>
-                    <p>
-                        <a href="https://www.michelin.hu/" target="_blank">Michelin Pilot Sport 4</a><br>
-                        <a href="https://www.continental.hu/" target="_blank">Continental SportContact 7</a>
-                    </p>
-                </div>
-                <div class="gumi-item">
-                    <h3>Téli gumik</h3>
-                    <p>
-                        <a href="https://www.bridgestone.hu/" target="_blank">Bridgestone Blizzak LM005</a><br>
-                        <a href="https://www.hankooktire.com/hu/" target="_blank">Hankook Winter i*cept</a>
-                    </p>
-                </div>
-            </div>
+  <section class="block" id="markak" aria-labelledby="markak-h">
+    <div class="block-head">
+      <p class="eyebrow">Márkák, amelyekkel a leggyakrabban dolgozunk</p>
+      <h2 id="markak-h">Audi, BMW, Škoda, Opel</h2>
+      <p>Minden márkának megvannak a maga sajátosságai. Ezeket érdemes tudni, mielőtt hangolásról vagy fékcseréről döntesz.</p>
+    </div>
+    <ul class="makes" id="makes-list">
+      <li class="msg muted" data-wait>Adatok betöltése…</li>
+    </ul>
+    <p class="fineprint" style="margin-top:16px">A felsorolt modellek példák, nem teljes lista. Más típusról is kérdezz bátran.</p>
+  </section>
 
-            <h3 style="margin-top: 20px;">Gumiabroncs érdeklődés</h3>
-            <form id="gumiForm">
-                <label>Szélesség (Pontosan 3 szám, pl. 205):</label>
-                <input type="text" id="gumiSzelesseg" placeholder="205" maxlength="3">
-                
-                <label>Magasság/Profil (Pontosan 2 szám, pl. 55):</label>
-                <input type="text" id="gumiMagassag" placeholder="55" maxlength="2">
+  <section class="block" id="gumi" aria-labelledby="gumi-h">
+    <div class="block-head">
+      <p class="eyebrow">Gumiabroncsok és méretkereső</p>
+      <h2 id="gumi-h">Válassz abroncsot, ellenőrizd a méretet</h2>
+      <p>Írd be a gumi oldalán található méretet (például 205/55 R16), és megmutatjuk az átmérőt, a kerületet és az eltérést az eredeti mérethez képest.</p>
+    </div>
+    <div class="two">
+      <div class="panel" id="tire-lists">
+        <p class="muted" data-wait>Adatok betöltése…</p>
+      </div>
 
-                <label>Átmérő (Pontosan 2 szám, pl. 16):</label>
-                <input type="text" id="gumiAtmero" placeholder="16" maxlength="2">
+      <form class="panel" id="tire-form" novalidate aria-labelledby="tire-h">
+        <h3 id="tire-h">Gumiabroncs érdeklődés</h3>
+        <div class="size-block">
+          <p class="sub">Jelenlegi (gyári) méret</p>
+          <div class="size-row">
+            <div class="field"><label for="cur-w">Szélesség</label><input id="cur-w" class="mono" type="text" inputmode="numeric" maxlength="3" placeholder="205" autocomplete="off" aria-describedby="tire-err"></div>
+            <div class="field"><label for="cur-p">Profil</label><input id="cur-p" class="mono" type="text" inputmode="numeric" maxlength="2" placeholder="55" autocomplete="off" aria-describedby="tire-err"></div>
+            <div class="field"><label for="cur-r">Átmérő (col)</label><input id="cur-r" class="mono" type="text" inputmode="numeric" maxlength="2" placeholder="16" autocomplete="off" aria-describedby="tire-err"></div>
+          </div>
+          <p class="hint">Pontosan 3 számjegy a szélességhez, 2 a profilhoz és 2 az átmérőhöz.</p>
+        </div>
+        <div class="size-block">
+          <p class="sub">Új méret az összehasonlításhoz (nem kötelező)</p>
+          <div class="size-row">
+            <div class="field"><label for="new-w">Szélesség</label><input id="new-w" class="mono" type="text" inputmode="numeric" maxlength="3" placeholder="225" autocomplete="off" aria-describedby="tire-err"></div>
+            <div class="field"><label for="new-p">Profil</label><input id="new-p" class="mono" type="text" inputmode="numeric" maxlength="2" placeholder="45" autocomplete="off" aria-describedby="tire-err"></div>
+            <div class="field"><label for="new-r">Átmérő (col)</label><input id="new-r" class="mono" type="text" inputmode="numeric" maxlength="2" placeholder="17" autocomplete="off" aria-describedby="tire-err"></div>
+          </div>
+          <p class="hint" style="margin-top:8px">Rendeléshez a terhelési és sebességindex (például 91V) is kell, ezt a gumi oldalfalán találod a méret után.</p>
+        </div>
+        <p class="error" id="tire-err" role="alert"></p>
+        <button class="btn btn-primary" type="submit">Méret ellenőrzése</button>
+        <div class="result-box" id="tire-out" aria-live="polite"></div>
+      </form>
+    </div>
+  </section>
 
-                <button type="button" onclick="gumiEllenorzes()">Méret ellenőrzése</button>
-            </form>
-            <p id="gumiUzenet"></p>
-        </section>
+  <section class="block" id="fek" aria-labelledby="fek-h">
+    <div class="block-head">
+      <p class="eyebrow">Fékrendszer alkatrész megrendelés</p>
+      <h2 id="fek-h">Fékalkatrész egy lépésben</h2>
+      <p>Válaszd ki a márkát és a szükséges alkatrészeket. Az árak tartalmazzák a beszerelés díját is.</p>
+    </div>
+    <div class="two">
+      <form class="stack" id="brake-form" novalidate>
+        <div class="form-grid">
+          <div class="field"><label for="b-name">Teljes név</label><input id="b-name" type="text" maxlength="60" autocomplete="name" required></div>
+          <div class="field"><label for="b-car">Autó márka és típus</label><input id="b-car" type="text" maxlength="40" list="car-list" placeholder="pl. BMW E90 320d" autocomplete="off" required>
+            <datalist id="car-list"></datalist>
+          </div>
+          <div class="field"><label for="b-year">Évjárat</label><input id="b-year" class="mono" type="text" inputmode="numeric" maxlength="4" placeholder="2009" autocomplete="off" required></div>
+          <div class="field"><label for="b-engine">Motor (nem kötelező)</label><input id="b-engine" type="text" maxlength="40" placeholder="pl. 2.0 diesel, 163 LE" autocomplete="off"></div>
+          <div class="field field-wide">
+            <label for="b-vin">Alvázszám (nem kötelező)</label>
+            <input id="b-vin" class="mono" type="text" maxlength="17" placeholder="17 karakter" autocomplete="off" spellcheck="false" style="text-transform:uppercase">
+            <p class="hint">Fékalkatrésznél ugyanazon típuson belül is többféle tárcsaméret létezik, az alvázszámmal azonosítható pontosan. A forgalmi engedélyben az „E” mezőben találod.</p>
+          </div>
+        </div>
+        <fieldset>
+          <legend class="legend-l" style="margin-bottom:8px">Kívánt márka</legend>
+          <div class="brands">
+            <label><input type="radio" name="brand" value="Brembo (Sport)" checked><b>Brembo</b><span>Sport</span></label>
+            <label><input type="radio" name="brand" value="ATE (Gyári minőség)"><b>ATE</b><span>Gyári minőség</span></label>
+            <label><input type="radio" name="brand" value="Textar (Prémium)"><b>Textar</b><span>Prémium</span></label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend class="legend-l" style="margin-bottom:8px">Melyik tengelyre?</legend>
+          <div class="brands">
+            <label><input type="radio" name="axle" value="Első tengely" checked><b>Első</b><span>Az első fékek</span></label>
+            <label><input type="radio" name="axle" value="Hátsó tengely"><b>Hátsó</b><span>A hátsó fékek</span></label>
+            <label><input type="radio" name="axle" value="Mindkét tengely"><b>Mindkettő</b><span>Első és hátsó</span></label>
+          </div>
+          <p class="hint" style="margin-top:8px">A tárcsákat és a betéteket mindig tengelyenként, egyszerre cseréljük, különben egyenetlen lesz a fékhatás. A mennyiségeket ennek megfelelően állítjuk be.</p>
+        </fieldset>
+        <fieldset>
+          <legend class="legend-l" style="margin-bottom:8px">Szükséges alkatrészek</legend>
+          <div class="opts" id="brake-parts"><p class="muted" data-wait style="padding:12px 14px;margin:0">Adatok betöltése…</p></div>
+          <div class="tips" id="brake-tips" aria-live="polite"></div>
+        </fieldset>
+        <p class="error" id="brake-err" role="alert"></p>
+        <div><button class="btn btn-primary" type="submit">Megrendelés összeállítása</button></div>
+      </form>
 
-        <!-- Fékalkatrész rendelés szekció -->
-        <section id="fek" class="card animate-on-scroll">
-            <h2>Fékrendszer Alkatrész Megrendelés</h2>
-            <p>Válaszd ki a márkát és a szükséges alkatrészeket (az árak tartalmazzák a beszerelés díját is)!</p>
-            <form id="rendelesForm">
-                <label for="nev">Teljes név:</label>
-                <input type="text" id="nev" placeholder="Kovács János">
+      <aside class="summary" aria-labelledby="bs-h" aria-live="polite">
+        <h3 id="bs-h">Megrendelés összegzése</h3>
+        <ul id="brake-lines"></ul>
+        <div class="total"><span class="muted">Összesen</span><strong id="brake-total" class="mono">0 Ft</strong></div>
+        <div id="brake-done" hidden>
+          <p class="ok" style="margin-bottom:12px">Az igény összeállt. Másold ki, és küldd el nekünk, hogy egyeztessünk.</p>
+          <div class="actions">
+            <button class="btn btn-ghost" type="button" id="brake-copy">Másolás vágólapra</button>
+            <a class="btn btn-primary" id="brake-mail" href="#" hidden>Küldés e-mailben</a>
+          </div>
+          <p class="fineprint" id="brake-copy-status" role="status" style="margin-top:10px"></p>
+        </div>
+      </aside>
+    </div>
+  </section>
 
-                <label for="auto">Autó márka és típus (pl. BMW E90 320d):</label>
-                <input type="text" id="auto" placeholder="Kezdődjön betűvel!">
+  <section class="block" id="arajanlat" aria-labelledby="araj-h">
+    <div class="block-head">
+      <p class="eyebrow">Komplex árajánlat kalkulátor</p>
+      <h2 id="araj-h">Jelöld be, amit szeretnél</h2>
+      <p>A végösszeg tájékoztató jellegű. A végleges árat az autó megtekintése után pontosítjuk.</p>
+    </div>
+    <div class="two">
+      <fieldset>
+        <legend class="sub" style="margin-bottom:10px">Szolgáltatások</legend>
+        <div class="opts" id="quote-items"><p class="muted" data-wait style="padding:12px 14px;margin:0">Adatok betöltése…</p></div>
+      </fieldset>
+      <aside class="summary" aria-labelledby="qs-h" aria-live="polite">
+        <h3 id="qs-h">Árajánlat</h3>
+        <ul id="quote-lines"></ul>
+        <div class="total"><span class="muted">Végösszeg (kb.)</span><strong id="quote-total" class="mono">0 Ft</strong></div>
+        <div class="tips" id="quote-tips"></div>
+        <div class="actions">
+          <button class="btn btn-primary" type="button" id="quote-copy" disabled>Árajánlat másolása</button>
+          <a class="btn btn-ghost" id="quote-mail" href="#" hidden>Küldés e-mailben</a>
+        </div>
+        <p class="fineprint" id="quote-status" role="status"></p>
+      </aside>
+    </div>
+  </section>
 
-                <label for="fekMarka">Kívánt márka:</label>
-                <select id="fekMarka">
-                    <option value="Brembo">Brembo (Sport)</option>
-                    <option value="ATE">ATE (Gyári minőség)</option>
-                    <option value="Textar">Textar (Prémium)</option>
-                </select>
+</div>
+</main>
 
-                <label>Szükséges alkatrészek:</label>
-                <div class="checkbox-group">
-                    <input type="checkbox" id="f_tarcsa" value="25000"> Féktárcsa (25.000 Ft/db)<br>
-                    <input type="checkbox" id="f_betet" value="15000"> Fékbetét (15.000 Ft/szett)<br>
-                    <input type="checkbox" id="f_nyereg" value="40000"> Féknyereg (40.000 Ft/db)<br>
-                    <input type="checkbox" id="f_folyadek" value="10000"> Fékfolyadék csere (10.000 Ft)
-                </div>
+<div class="wrap">
+  <footer>
+    <div class="contact-line" id="contact">
+      <strong style="color:var(--fg)">Szalka AutoTuning &amp; Szerviz</strong>
+      <span>Mátészalka</span>
+    </div>
+    <div>
+      <p>© 2026 Szalka AutoTuning. Készítette: Kovács Eduárd, Gráma Bence.</p>
+      <p><a href="#top">↑ Vissza az oldal tetejére</a></p>
+    </div>
+  </footer>
+</div>
 
-                <button type="button" onclick="fekRendeles()">Megrendelés elküldése</button>
-            </form>
-            <p id="rendelesUzenet"></p>
-        </section>
+<button class="to-top" id="to-top" type="button" aria-label="Vissza az oldal tetejére" hidden>↑</button>
 
-        <!-- Árajánlat kalkulátor -->
-        <section id="arajanlat" class="card animate-on-scroll">
-            <h2>Komplex Árajánlat Kalkulátor</h2>
-            <p>Jelöld be azokat a szolgáltatásokat, amelyeket igénybe szeretnél venni!</p>
-            <form id="kalkulatorForm">
-                <div class="checkbox-group">
-                    <input type="checkbox" class="szolgaltatas_ar" value="95000"> Chiptuning Stage 1 (95.000 Ft)<br>
-                    <input type="checkbox" class="szolgaltatas_ar" value="250000"> Kipufogó és Szívósor Stage 2 (250.000 Ft)<br>
-                    <input type="checkbox" class="szolgaltatas_ar" value="450000"> Turbó csere/beépítés (450.000 Ft)<br>
-                    <input type="checkbox" class="szolgaltatas_ar" value="16000"> Gumiszerelés és centírozás (4 db) (16.000 Ft)<br>
-                    <input type="checkbox" class="szolgaltatas_ar" value="30000"> Kötelező szerviz: Olaj + Szűrők cseréje (30.000 Ft)<br>
-                </div>
-                <button type="button" onclick="arKalkulalas()">Végösszeg kiszámítása</button>
-            </form>
-            <h3 id="kalkulaltAr"></h3>
-        </section>
-    </main>
+<noscript><p style="padding:16px">Az oldal kalkulátorainak működéséhez JavaScript szükséges.</p></noscript>
 
-    <footer>
-        <p>&copy; 2026 Szalka AutoTuning. Készítette: Kovács Eduárd, Gráma Bence.</p>
-    </footer>
+<script>
+(() => {
+  'use strict';
 
-    <button id="felGomb" onclick="felUgras()">↑</button>
+  /* Töltsd ki, ha szeretnéd, hogy megjelenjen a telefonszám és az e-mail-küldés gomb. */
+  const CONFIG = { email: '', phone: '' };
 
-    <script src="script.js"></script>
+  const $ = (s, r = document) => r.querySelector(s);
+  const nf = new Intl.NumberFormat('hu-HU', { maximumFractionDigits: 0 });
+  const nf1 = new Intl.NumberFormat('hu-HU', { maximumFractionDigits: 1, minimumFractionDigits: 1 });
+  const ft = n => nf.format(Math.round(n)) + ' Ft';
+
+  async function copyText(text, statusEl) {
+    try {
+      await navigator.clipboard.writeText(text);
+      statusEl.textContent = 'Vágólapra másolva.';
+      return;
+    } catch (_) { /* fallback below */ }
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = text; ta.setAttribute('readonly', '');
+      ta.style.cssText = 'position:fixed;left:-9999px;top:0';
+      document.body.appendChild(ta); ta.select();
+      const ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+      statusEl.textContent = ok ? 'Vágólapra másolva.' : 'A másolás nem sikerült, jelöld ki és másold ki kézzel.';
+    } catch (_) {
+      statusEl.textContent = 'A másolás nem sikerült, jelöld ki és másold ki kézzel.';
+    }
+  }
+
+  function setMail(a, subject, body) {
+    if (!CONFIG.email) { a.hidden = true; return; }
+    a.href = 'mailto:' + CONFIG.email + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    a.hidden = false;
+  }
+
+  /* ---------- Mezők szűrése: értelmetlen karaktert be sem enged ---------- */
+  const bad = (el, on) => { if (on) el.setAttribute('aria-invalid', 'true'); else el.removeAttribute('aria-invalid'); };
+  const clean = (el, re, fn) => el.addEventListener('input', () => {
+    const before = el.value;
+    let v = before.replace(re, '');
+    if (fn) v = fn(v);
+    if (v !== before) {
+      let pos = null;
+      try { pos = Math.max(0, el.selectionStart - (before.length - v.length)); } catch (_) { /* nincs kurzor */ }
+      el.value = v;
+      try { if (pos !== null) el.setSelectionRange(pos, pos); } catch (_) { /* nem fontos */ }
+    }
+    bad(el, false);
+  });
+  const tidy = v => v.replace(/\s{2,}/g, ' ').replace(/^\s+/, '');
+  ['dyno-hp', 'cur-w', 'cur-p', 'cur-r', 'new-w', 'new-p', 'new-r', 'b-year'].forEach(id => clean($('#' + id), /\D+/g));
+  clean($('#b-name'), /[^\p{L}\s.'’-]+/gu, tidy);                 // csak betű, szóköz, kötőjel, pont
+  clean($('#b-car'), /[^\p{L}\p{N}\s.\/+-]+/gu, tidy);            // betű, szám, szóköz, . / + -
+  clean($('#b-engine'), /[^\p{L}\p{N}\s.,\/()+-]+/gu, tidy);
+  clean($('#b-vin'), /[^A-Za-z0-9]+/g, v => v.toUpperCase().replace(/[IOQ]/g, ''));  // alvázszámban nincs I, O, Q
+
+  /* ---------- Vissza a tetejére gomb ---------- */
+  (() => {
+    const btn = $('#to-top');
+    const reduce = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : { matches: false };
+    const toggle = () => { btn.hidden = window.scrollY < 480; };
+    window.addEventListener('scroll', toggle, { passive: true });
+    btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: reduce.matches ? 'auto' : 'smooth' }));
+    toggle();
+  })();
+
+  /* ---------- Kapcsolat (csak ha ki van töltve) ---------- */
+  (() => {
+    const box = $('#contact');
+    if (CONFIG.phone) {
+      const a = document.createElement('a');
+      a.href = 'tel:' + CONFIG.phone.replace(/[^\d+]/g, ''); a.textContent = CONFIG.phone;
+      box.appendChild(a);
+    }
+    if (CONFIG.email) {
+      const a = document.createElement('a');
+      a.href = 'mailto:' + CONFIG.email; a.textContent = CONFIG.email;
+      box.appendChild(a);
+    }
+  })();
+
+  /* ---------- Stage 1 becslő ---------- */
+  function initDyno(TYPES) {
+    const svg = $('#dyno-svg'), input = $('#dyno-hp'), out = $('#dyno-out'), typeSel = $('#dyno-type');
+    const W = 420, H = 280, L = 44, R = 12, T = 18, B = 34, X0 = 1500, X1 = 7000, PEAK = 5400;
+    const shape = r => 0.18 + 0.82 * Math.exp(-Math.pow(r - 1, 2) / (2 * Math.pow(r < 1 ? 0.42 : 0.30, 2)));
+    const gain = r => 0.55 + 0.45 * Math.exp(-Math.pow(r - 0.85, 2) / (2 * 0.35 * 0.35));
+
+    function draw(P, rg) {
+      const ymax = Math.ceil(P * 1.3 / 100) * 100;
+      const X = r => L + (r - X0) / (X1 - X0) * (W - L - R);
+      const Y = v => T + (1 - v / ymax) * (H - T - B);
+      const rpms = []; for (let r = X0; r <= X1; r += 100) rpms.push(r);
+      const base = r => P * shape(r / PEAK);
+      const up = (r, k) => base(r) * (1 + k * gain(r / PEAK));
+      const line = fn => rpms.map((r, i) => (i ? 'L' : 'M') + X(r).toFixed(1) + ' ' + Y(fn(r)).toFixed(1)).join('');
+      const band = line(r => up(r, rg.hi)) + rpms.slice().reverse().map(r => 'L' + X(r).toFixed(1) + ' ' + Y(up(r, rg.lo)).toFixed(1)).join('') + 'Z';
+
+      let g = '';
+      const step = ymax / 4;
+      for (let i = 0; i <= 4; i++) {
+        const v = step * i, y = Y(v).toFixed(1);
+        g += `<line class="grid" x1="${L}" x2="${W - R}" y1="${y}" y2="${y}"/><text class="axis" x="${L - 8}" y="${(+y + 4)}" text-anchor="end">${Math.round(v)}</text>`;
+      }
+      for (let r = 2000; r <= 7000; r += 1000) {
+        g += `<text class="axis" x="${X(r).toFixed(1)}" y="${H - 14}" text-anchor="middle">${r / 1000}k</text>`;
+      }
+      g += `<text class="axis" x="${W - R}" y="${H - 1}" text-anchor="end">ford./perc</text>`;
+      g += `<text class="axis" x="${L - 8}" y="${T - 6}" text-anchor="end">LE</text>`;
+      const lo = Math.round(P * (1 + rg.lo)), hi = Math.round(P * (1 + rg.hi));
+      const px = X(PEAK), py = Y(up(PEAK, rg.hi));
+      svg.innerHTML = g +
+        `<path class="c-band" d="${band}"/>` +
+        `<path class="c-stock" d="${line(base)}"/>` +
+        `<path class="c-s1" d="${line(r => up(r, rg.mid))}"/>` +
+        `<text class="peak" x="${Math.min(px, W - R - 40).toFixed(1)}" y="${(py - 10).toFixed(1)}" text-anchor="middle">${lo}–${hi}</text>`;
+      svg.setAttribute('aria-label', `Szemléltető teljesítménygörbe: gyári ${Math.round(P)} LE, Stage 1 után körülbelül ${lo}–${hi} LE`);
+      out.textContent = `${lo}–${hi} LE`;
+    }
+    function update() {
+      const raw = input.value.trim();
+      const v = /^\d{2,3}$/.test(raw) ? +raw : NaN;
+      if (!Number.isFinite(v) || v < 40 || v > 800) {
+        bad(input, true); svg.classList.add('stale');
+        out.textContent = 'Adj meg 40–800 LE közötti értéket';
+        return;
+      }
+      bad(input, false); svg.classList.remove('stale');
+      const rg = TYPES[typeSel.value] || TYPES.turbo;
+      $('#dyno-legend').textContent = rg.legend;
+      $('#dyno-note').textContent = rg.note;
+      draw(v, rg);
+    }
+    input.addEventListener('input', update);
+    typeSel.addEventListener('change', update);
+    update();
+  }
+
+  /* ---------- Gumiabroncs méretkereső ---------- */
+  (() => {
+    const form = $('#tire-form'), err = $('#tire-err'), out = $('#tire-out');
+    const RANGE = { w: [125, 395], p: [20, 90], r: [12, 26] };
+
+    const group = prefix => ['w', 'p', 'r'].map(k => $('#' + prefix + '-' + k));
+    function read(prefix) {
+      const f = k => $('#' + prefix + '-' + k);
+      const w = f('w').value.trim(), p = f('p').value.trim(), r = f('r').value.trim();
+      if (!w && !p && !r) return { empty: true };
+      const fail = (k, error) => ({ error, field: f(k) });
+      if (!/^\d{3}$/.test(w)) return fail('w', 'A szélesség pontosan 3 számjegy legyen, például 205.');
+      if (+w < RANGE.w[0] || +w > RANGE.w[1]) return fail('w', `A szélesség ${RANGE.w[0]} és ${RANGE.w[1]} mm között lehet.`);
+      if (+w % 5) return fail('w', 'A gumiszélesség 5 mm-es lépésekben van, például 195, 205, 215.');
+      if (!/^\d{2}$/.test(p)) return fail('p', 'A profil pontosan 2 számjegy legyen, például 55.');
+      if (+p < RANGE.p[0] || +p > RANGE.p[1]) return fail('p', `A profil ${RANGE.p[0]} és ${RANGE.p[1]} között lehet.`);
+      if (+p % 5) return fail('p', 'A profil 5-ös lépésekben van, például 40, 45, 50, 55.');
+      if (!/^\d{2}$/.test(r)) return fail('r', 'Az átmérő pontosan 2 számjegy legyen, például 16.');
+      if (+r < RANGE.r[0] || +r > RANGE.r[1]) return fail('r', `Az átmérő ${RANGE.r[0]} és ${RANGE.r[1]} col között lehet.`);
+      return { w: +w, p: +p, r: +r };
+    }
+    function calc(s) {
+      const side = s.w * s.p / 100;
+      const dia = s.r * 25.4 + 2 * side;
+      const circ = Math.PI * dia;
+      return { side, dia, circ, revs: 1e6 / circ };
+    }
+    const cells = (label, s, c) => `
+      <p class="sub">${label}: ${s.w}/${s.p} R${s.r}</p>
+      <dl class="result-grid">
+        <div><dt>Oldalfal magasság</dt><dd>${nf1.format(c.side)} mm</dd></div>
+        <div><dt>Külső átmérő</dt><dd>${nf1.format(c.dia)} mm</dd></div>
+        <div><dt>Kerület</dt><dd>${nf.format(c.circ)} mm</dd></div>
+        <div><dt>Fordulat / km</dt><dd>${nf.format(c.revs)}</dd></div>
+      </dl>`;
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      out.innerHTML = ''; err.textContent = '';
+      form.querySelectorAll('input').forEach(i => bad(i, false));
+      const cur = read('cur');
+      if (cur.empty) { err.textContent = 'Add meg a jelenlegi gumiméretet.'; group('cur').forEach(i => bad(i, true)); $('#cur-w').focus(); return; }
+      if (cur.error) { err.textContent = 'Jelenlegi méret: ' + cur.error; bad(cur.field, true); cur.field.focus(); return; }
+      const nw = read('new');
+      if (nw.error) { err.textContent = 'Új méret: ' + nw.error; bad(nw.field, true); nw.field.focus(); return; }
+
+      const cc = calc(cur);
+      let html = cells('Jelenlegi', cur, cc);
+      if (!nw.empty) {
+        const nc = calc(nw);
+        const ratio = nc.dia / cc.dia, diff = (ratio - 1) * 100;
+        const sign = diff > 0 ? '+' : '';
+        html += cells('Új', nw, nc);
+        const real = 100 * ratio, a = Math.abs(diff);
+        let rating;
+        if (a <= 1) rating = 'Gyakorlatilag azonos átmérő, a sebességmérő és a vezérlőelektronika számára nincs érdemi különbség.';
+        else if (a <= 3) rating = 'Kis eltérés. Általában elfogadható, de a forgalmi engedélyben szereplő méretekkel egyeztetni kell.';
+        else rating = 'Jelentős eltérés. Befolyásolja a sebességmérőt, az ABS/ESP működését és a váltóáttételt, ezért nem javasoljuk, hacsak a forgalmi engedély nem engedi.';
+        html += `<div class="verdict"><strong>Átmérő-eltérés: ${sign}${nf1.format(diff)}%</strong><br>
+          ${rating}<br>Ha a sebességmérő 100 km/h-t mutat, a valós sebesség kb. ${nf1.format(real)} km/h lesz (pontos gyári műszert feltételezve; a gyári sebességmérő általában eleve kicsit többet mutat).
+          A gumi mellett a terhelési index, a sebességindex és a felni szélessége is megfelelő kell legyen.</div>`;
+      }
+      out.innerHTML = html;
+    });
+  })();
+
+  /* ---------- Kapcsoló-sorok építése (fék + árajánlat) ---------- */
+  function buildRow(host, item, prefix) {
+    const row = document.createElement('div');
+    row.className = 'opt' + (item.qty ? '' : ' simple');
+    const id = prefix + '-' + item.id;
+    let qty = '';
+    if (item.qty) {
+      let o = '';
+      item.qty.opts.forEach(i => { o += `<option value="${i}"${i === item.qty.def ? ' selected' : ''}>${i}</option>`; });
+      qty = `<select id="${id}-q" aria-label="${item.name} mennyiség" disabled>${o}</select>`;
+    }
+    row.innerHTML = `
+      <input type="checkbox" id="${id}" value="${item.id}">
+      <label class="name" for="${id}" style="cursor:pointer">${item.name}${item.note ? `<small>${item.note}</small>` : ''}</label>
+      <span class="p">${item.priceLabel}</span>${qty}`;
+    host.appendChild(row);
+    const cb = $('#' + id, row), sel = item.qty ? $('#' + id + '-q', row) : null;
+    cb.addEventListener('change', () => { if (sel) sel.disabled = !cb.checked; });
+    return { cb, sel };
+  }
+  function renderLines(ul, lines) {
+    ul.innerHTML = '';
+    if (!lines.length) {
+      const li = document.createElement('li'); li.className = 'empty'; li.textContent = 'Még nincs kiválasztott tétel.';
+      ul.appendChild(li); return;
+    }
+    lines.forEach(l => {
+      const li = document.createElement('li');
+      const a = document.createElement('span'), b = document.createElement('span');
+      a.textContent = l.label; b.textContent = l.value;
+      li.append(a, b); ul.appendChild(li);
+    });
+  }
+
+  /* ---------- Fékalkatrész megrendelés ---------- */
+  let brakeReady = false;
+  $('#brake-form').addEventListener('submit', e => {
+    e.preventDefault();   // betöltés előtt se töltődjön újra az oldal
+    if (!brakeReady) $('#brake-err').textContent = 'Az alkatrészlista még nem töltődött be. Próbáld újra egy pillanat múlva.';
+  });
+
+  function initBrake(PARTS) {
+    brakeReady = true;
+    const host = $('#brake-parts'), form = $('#brake-form'), err = $('#brake-err');
+    host.textContent = '';
+    const done = $('#brake-done'), copyBtn = $('#brake-copy'), mail = $('#brake-mail'), status = $('#brake-copy-status');
+    const ctl = PARTS.map(p => ({ p, ...buildRow(host, p, 'bp') }));
+
+    function lines() {
+      return ctl.filter(c => c.cb.checked).map(c => {
+        const q = c.sel ? +c.sel.value : 1;
+        return { label: c.sel ? `${c.p.name} × ${q} ${c.p.unit}` : c.p.name, amount: c.p.price * q, value: ft(c.p.price * q) };
+      });
+    }
+    const tips = $('#brake-tips');
+    const byId = id => ctl.find(c => c.p.id === id);
+
+    function applyAxle() {
+      const n = form.elements.axle.value === 'Mindkét tengely' ? 2 : 1;
+      byId('disc').sel.value = String(2 * n);
+      byId('pad').sel.value = String(n);
+      byId('caliper').sel.value = String(2 * n);
+    }
+    function showTips() {
+      const d = byId('disc').cb.checked, p = byId('pad').cb.checked, c = byId('caliper').cb.checked, f = byId('fluid').cb.checked;
+      const msgs = [];
+      if (d && !p) msgs.push('Új féktárcsához új fékbetét tartozik, a régi betét az új tárcsán nem fekszik fel rendesen.');
+      if ((d || p || c) && !f) msgs.push('Fékalkatrész-csere mellé ajánlott a fékfolyadék cseréje is. A fékfolyadék nedvességet vesz fel, ezért általában kétévente esedékes.');
+      const car = $('#b-car').value.toLowerCase();
+      const rear = form.elements.axle.value !== 'Első tengely';
+      if (rear && (d || p) && /audi|bmw|[sš]koda|opel/.test(car)) msgs.push('Elektromos kézifékes autónál a hátsó fékek szervizeléséhez diagnosztikai műszer kell. Ez több Audi, BMW, Škoda és Opel modellen jellemző.');
+      if (p && /bmw/.test(car)) msgs.push('BMW-nél a fékbetét kopásérzékelője a betéttel együtt cserélendő, a csere után a kopásjelzést nullázni kell.');
+      tips.innerHTML = '';
+      msgs.forEach(m => { const el = document.createElement('p'); el.textContent = m; tips.appendChild(el); });
+    }
+    $('#b-car').addEventListener('input', showTips);
+    function refresh() {
+      const l = lines();
+      renderLines($('#brake-lines'), l);
+      $('#brake-total').textContent = ft(l.reduce((s, x) => s + x.amount, 0));
+      showTips();
+      done.hidden = true;
+    }
+    form.addEventListener('change', e => {
+      if (e.target && e.target.name === 'axle') applyAxle();
+      refresh();
+    });
+    applyAxle();
+    refresh();
+
+    function text(l) {
+      const v = id => $('#' + id).value.trim();
+      const rows = ['Fékalkatrész igény – Szalka AutoTuning', 'Név: ' + v('b-name'), 'Autó: ' + v('b-car'), 'Évjárat: ' + v('b-year')];
+      if (v('b-engine')) rows.push('Motor: ' + v('b-engine'));
+      if (v('b-vin')) rows.push('Alvázszám: ' + v('b-vin').toUpperCase());
+      rows.push('Tengely: ' + form.elements.axle.value, 'Kívánt márka: ' + form.elements.brand.value);
+      return [...rows, ...l.map(x => `- ${x.label} (${x.value})`), 'Összesen: ' + ft(l.reduce((s, x) => s + x.amount, 0))].join('\n');
+    }
+    const fields = ['b-name', 'b-car', 'b-year', 'b-engine', 'b-vin'].map(id => $('#' + id));
+    const letters = s => s.replace(/[^\p{L}]/gu, '').length;
+    const junk = s => /(.)\1{3,}/u.test(s.toLowerCase());     // pl. "aaaa", "xxxx"
+    function check() {
+      const errs = [];
+      const add = (id, msg) => errs.push({ el: $('#' + id), msg });
+      const v = id => $('#' + id).value.trim().replace(/\s{2,}/g, ' ');
+      const name = v('b-name'), car = v('b-car'), year = v('b-year'), engine = v('b-engine'), vin = v('b-vin').toUpperCase();
+      const words = name.split(' ').filter(Boolean);
+      if (words.length < 2 || words.slice(0, 2).some(w => letters(w) < 2) || letters(name) < 5 || junk(name))
+        add('b-name', 'Add meg a teljes neved, vezetéknévvel és keresztnévvel.');
+      if (car.length < 3 || letters(car) < 2 || junk(car))
+        add('b-car', 'Add meg az autó márkáját és típusát, például BMW E90 320d.');
+      const maxYear = new Date().getFullYear() + 1;
+      if (!/^\d{4}$/.test(year) || +year < 1970 || +year > maxYear)
+        add('b-year', `Az évjárat 4 számjegy legyen, 1970 és ${maxYear} között.`);
+      if (engine && (engine.length < 2 || !/\d/.test(engine) || junk(engine)))
+        add('b-engine', 'A motornál add meg a méretet vagy a teljesítményt, például 2.0 TDI, 140 LE. Ha nem tudod, hagyd üresen.');
+      if (vin && !/^[A-HJ-NPR-Z0-9]{17}$/.test(vin))
+        add('b-vin', 'Az alvázszám pontosan 17 karakter (betűk és számok, I, O és Q nélkül). Ha nem tudod, hagyd üresen.');
+      return errs;
+    }
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      err.textContent = ''; status.textContent = '';
+      fields.forEach(f => bad(f, false));
+      const errs = check();
+      if (errs.length) {
+        errs.forEach(x => bad(x.el, true));
+        err.textContent = errs[0].msg + (errs.length > 1 ? ` (Még ${errs.length - 1} mező hibás, pirossal jelöltük.)` : '');
+        errs[0].el.focus();
+        return;
+      }
+      const car = $('#b-car').value.trim(), l = lines();
+      if (!l.length) { err.textContent = 'Válassz ki legalább egy alkatrészt.'; return; }
+      const t = text(l);
+      done.hidden = false;
+      copyBtn.onclick = () => copyText(t, status);
+      setMail(mail, 'Fékalkatrész igény – ' + car, t);
+    });
+  }
+
+  /* ---------- Komplex árajánlat ---------- */
+  function initQuote(ITEMS) {
+    const host = $('#quote-items'), copyBtn = $('#quote-copy'), status = $('#quote-status'), mail = $('#quote-mail'), tipsEl = $('#quote-tips');
+    host.textContent = '';
+    const ctl = ITEMS.map(i => ({ i, ...buildRow(host, i, 'q') }));
+    let current = '';
+
+    function refresh() {
+      const sel = ctl.filter(c => c.cb.checked);
+      const total = sel.reduce((s, c) => s + c.i.price, 0);
+      const from = sel.some(c => c.i.from);
+      renderLines($('#quote-lines'), sel.map(c => ({ label: c.i.name, value: c.i.priceLabel })));
+      $('#quote-total').textContent = ft(total) + (from ? '-tól' : '');
+      copyBtn.disabled = !sel.length;
+      status.textContent = '';
+      const has = id => sel.some(c => c.i.id === id);
+      const tuned = ['stage1', 'stage2', 'turbo'].filter(has).length;
+      const msgs = [];
+      if (tuned && !has('service')) msgs.push('Hangolás előtt a motornak szervizelt állapotban kell lennie, ezért érdemes mellé az olaj- és szűrőcserét is kérni.');
+      if (tuned > 1) msgs.push('A hangolási lépcsők ára átfedhet: a Stage 2 hardver mellé szoftveres hangolás is kell, a turbó pedig egyedi programozással készül. A végleges összeget árajánlatkor pontosítjuk.');
+      tipsEl.innerHTML = '';
+      msgs.forEach(m => { const el = document.createElement('p'); el.textContent = m; tipsEl.appendChild(el); });
+      current = sel.length
+        ? ['Árajánlat – Szalka AutoTuning', ...sel.map(c => `- ${c.i.name}: ${c.i.priceLabel}`), 'Végösszeg (kb.): ' + ft(total) + (from ? '-tól' : '')].join('\n')
+        : '';
+      if (current) setMail(mail, 'Árajánlat kérés', current); else mail.hidden = true;
+    }
+    host.addEventListener('change', refresh);
+    copyBtn.addEventListener('click', () => { if (current) copyText(current, status); });
+    refresh();
+  }
+
+  /* ---------- Adat-API ----------
+     Az árak, szolgáltatások, gumik és márkák az adatok.json fájlból jönnek.
+     Az API betölti, ellenőrzi és a kódnak megfelelő alakra hozza az adatokat,
+     így egy árat elég a JSON-ban átírni, a HTML-hez és a JS-hez nem kell nyúlni. */
+  const API = {
+    url: 'adatok.json',
+    timeoutMs: 8000,
+    data: null,
+
+    priceLabel(item) {
+      return ft(item.price) + (item.from ? '-tól' : item.unit ? ' / ' + item.unit : '');
+    },
+
+    async load() {
+      const ctl = new AbortController();
+      const timer = setTimeout(() => ctl.abort(), this.timeoutMs);
+      try {
+        const res = await fetch(this.url, { cache: 'no-cache', signal: ctl.signal });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        this.data = this.normalize(await res.json());
+        return this.data;
+      } finally {
+        clearTimeout(timer);
+      }
+    },
+
+    /* Minden mezőt ellenőriz; hibás adatnál kivételt dob, így rossz ár sosem kerül ki az oldalra. */
+    normalize(raw) {
+      const bad = what => { throw new Error('Hibás adat: ' + what); };
+      const list = (v, what) => (Array.isArray(v) && v.length ? v : bad(what));
+      const text = (v, what) => (typeof v === 'string' && v.trim() ? v.trim() : bad(what));
+      const price = (v, what) => (typeof v === 'number' && Number.isFinite(v) && v > 0 && v < 1e8 ? v : bad(what));
+      const link = (v, what) => (typeof v === 'string' && /^https:\/\/[^\s]+$/.test(v) ? v : bad(what));
+      const uniq = (items, what) => { if (new Set(items.map(i => i.id)).size !== items.length) bad(what + ' (ismétlődő azonosító)'); return items; };
+      if (!raw || typeof raw !== 'object') bad('az adatfájl');
+
+      const hangolas = uniq(list(raw.hangolas, 'hangolas').map((h, i) => ({
+        id: text(h.id, `hangolas[${i}].id`), name: text(h.nev, `hangolas[${i}].nev`), desc: text(h.leiras, `hangolas[${i}].leiras`),
+        price: price(h.ar, `hangolas[${i}].ar`), from: h.tol === true
+      })), 'hangolas');
+      const byId = Object.fromEntries(hangolas.map(h => [h.id, h]));
+
+      const teljesitmeny = {};
+      ['turbo', 'na'].forEach(k => {
+        const t = (raw.teljesitmeny || {})[k] || bad('teljesitmeny.' + k);
+        const lo = t.min, hi = t.max;
+        if (!(typeof lo === 'number' && typeof hi === 'number' && lo > 0 && hi > lo && hi < 1)) bad(`teljesitmeny.${k} (min/max)`);
+        teljesitmeny[k] = { lo, hi, mid: (lo + hi) / 2, legend: text(t.cimke, `teljesitmeny.${k}.cimke`), note: text(t.megjegyzes, `teljesitmeny.${k}.megjegyzes`) };
+      });
+
+      const tires = (arr, what) => list(arr, what).map((g, i) => {
+        const url = link(g.url, `${what}[${i}].url`);
+        return { name: text(g.nev, `${what}[${i}].nev`), url, domain: new URL(url).hostname.replace(/^www\./, '') };
+      });
+      const gumik = { nyari: tires((raw.gumik || {}).nyari, 'gumik.nyari'), teli: tires((raw.gumik || {}).teli, 'gumik.teli') };
+
+      const markak = list(raw.markak, 'markak').map((m, i) => ({
+        name: text(m.nev, `markak[${i}].nev`),
+        models: list(m.modellek, `markak[${i}].modellek`).map((x, j) => text(x, `markak[${i}].modellek[${j}]`)),
+        know: text(m.leiras, `markak[${i}].leiras`)
+      }));
+
+      const fek = uniq(list(raw.fekalkatreszek, 'fekalkatreszek').map((p, i) => {
+        const o = { id: text(p.id, `fekalkatreszek[${i}].id`), name: text(p.nev, `fekalkatreszek[${i}].nev`),
+          note: typeof p.megjegyzes === 'string' ? p.megjegyzes : '', price: price(p.ar, `fekalkatreszek[${i}].ar`),
+          unit: typeof p.egyseg === 'string' ? p.egyseg : '' };
+        if (p.mennyiseg) {
+          const opts = list(p.mennyiseg.opciok, `fekalkatreszek[${i}].mennyiseg.opciok`);
+          if (!opts.every(n => Number.isInteger(n) && n >= 1 && n <= 8) || !opts.includes(p.mennyiseg.alap)) bad(`fekalkatreszek[${i}].mennyiseg`);
+          o.qty = { opts, def: p.mennyiseg.alap };
+        }
+        o.priceLabel = this.priceLabel(o);
+        return o;
+      }), 'fekalkatreszek');
+      ['disc', 'pad', 'caliper', 'fluid'].forEach(id => { if (!fek.some(p => p.id === id && (id === 'fluid' || p.qty))) bad('hiányzó fékalkatrész: ' + id); });
+
+      // A hangolási tételek ára a "hangolas" listából jön, hogy egy ár csak egy helyen szerepeljen.
+      const arajanlat = uniq(list(raw.arajanlat, 'arajanlat').map((q, i) => {
+        const base = byId[q.id];
+        const o = { id: text(q.id, `arajanlat[${i}].id`), name: text(q.nev, `arajanlat[${i}].nev`),
+          price: base ? base.price : price(q.ar, `arajanlat[${i}].ar`), from: base ? base.from : q.tol === true };
+        o.priceLabel = this.priceLabel(o);
+        return o;
+      }), 'arajanlat');
+      ['stage1', 'stage2', 'turbo', 'service'].forEach(id => { if (!arajanlat.some(q => q.id === id)) bad('hiányzó árajánlat-tétel: ' + id); });
+
+      return { hangolas, teljesitmeny, gumik, markak, fek, arajanlat };
+    }
+  };
+
+  /* ---------- Megjelenítés (az adatokból épül, nem innerHTML-lel) ---------- */
+  const el = (tag, cls, txt) => { const n = document.createElement(tag); if (cls) n.className = cls; if (txt !== undefined) n.textContent = txt; return n; };
+
+  function renderStages(list) {
+    const ol = $('#stages'); ol.textContent = '';
+    list.forEach(s => {
+      const li = el('li'), price = el('p', 'price');
+      price.append(el('small', null, 'kb.'), document.createTextNode(API.priceLabel(s)));
+      li.append(el('h3', null, s.name), el('p', 'desc', s.desc), price);
+      ol.appendChild(li);
+    });
+  }
+  function renderTires(g) {
+    const box = $('#tire-lists'); box.textContent = '';
+    [['Nyári gumik', g.nyari], ['Téli gumik', g.teli]].forEach(([title, items]) => {
+      const ul = el('ul', 'tire-list');
+      items.forEach(t => {
+        const li = el('li'), a = el('a');
+        a.href = t.url; a.target = '_blank'; a.rel = 'noopener noreferrer';
+        a.append(el('span', null, t.name), el('span', null, t.domain + ' ↗'));
+        li.appendChild(a); ul.appendChild(li);
+      });
+      box.append(el('p', 'sub', title), ul);
+    });
+  }
+  function renderMakes(list) {
+    const ul = $('#makes-list'); ul.textContent = '';
+    list.forEach(m => {
+      const li = el('li');
+      li.append(el('h3', null, m.name), el('p', 'models', m.models.join(' · ')), el('p', 'know', m.know));
+      ul.appendChild(li);
+    });
+    const dl = $('#car-list'); dl.textContent = '';
+    list.forEach(m => m.models.forEach(model => { const o = el('option'); o.value = m.name + ' ' + model; dl.appendChild(o); }));
+  }
+
+  /* ---------- Indítás ---------- */
+  const banner = $('#data-status');
+  let booting = false;
+  async function boot() {
+    if (booting) return;
+    booting = true;
+    banner.hidden = true;
+    document.querySelectorAll('[data-wait]').forEach(n => { n.textContent = 'Adatok betöltése…'; });
+    let d;
+    try {
+      d = await API.load();
+    } catch (e) {
+      document.querySelectorAll('[data-wait]').forEach(n => { n.textContent = 'Az adatok most nem érhetők el.'; });
+      banner.hidden = false;
+      if (window.console) console.error('Az adatok betöltése nem sikerült:', e);
+      booting = false;
+      return;
+    }
+    renderStages(d.hangolas);
+    renderTires(d.gumik);
+    renderMakes(d.markak);
+    initDyno(d.teljesitmeny);
+    initBrake(d.fek);
+    initQuote(d.arajanlat);
+    booting = false;
+  }
+  $('#data-retry').addEventListener('click', boot);
+  boot();
+})();
+</script>
 </body>
 </html>
