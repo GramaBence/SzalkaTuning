@@ -1,0 +1,91 @@
+{
+  "verzio": "2026-11-22",
+
+  "hangolas": [
+    {
+      "id": "stage1",
+      "nev": "Stage 1 · Chiptuning",
+      "leiras": "Szoftveres optimalizálás, turbós motoroknál körülbelül +15–20% teljesítménynövekedés (LE). Szívó benzines motoron a nyereség ennél jóval kisebb.",
+      "ar": 95000,
+      "tol": false
+    },
+    {
+      "id": "stage2",
+      "nev": "Stage 2 · Kipufogó + szívósor",
+      "leiras": "Hardveres módosítások, amelyekhez szoftveres hangolás is tartozik.",
+      "ar": 250000,
+      "tol": false
+    },
+    {
+      "id": "turbo",
+      "nev": "Turbó kialakítás / csere",
+      "leiras": "Nagyobb turbófeltöltő beépítése, egyedi programozással.",
+      "ar": 450000,
+      "tol": true
+    }
+  ],
+
+  "teljesitmeny": {
+    "turbo": {
+      "min": 0.15,
+      "max": 0.20,
+      "cimke": "Stage 1 (+15–20%)",
+      "megjegyzes": "A görbe szemléltető, nem mérési eredmény. A tényleges érték motortól, állapottól és üzemanyagtól függ, a pontos számot mérés után adjuk meg."
+    },
+    "na": {
+      "min": 0.03,
+      "max": 0.08,
+      "cimke": "Stage 1 (+3–8%)",
+      "megjegyzes": "Szívó benzines motoron a szoftveres hangolás nyeresége kicsi. Itt a hardveres lépcső (Stage 2) hoz érdemi többletet. A görbe szemléltető, a pontos értéket mérés után adjuk meg."
+    }
+  },
+
+  "gumik": {
+    "nyari": [
+      { "nev": "Michelin Pilot Sport 4", "url": "https://www.michelin.hu/" },
+      { "nev": "Continental SportContact 7", "url": "https://www.continental.hu/" }
+    ],
+    "teli": [
+      { "nev": "Bridgestone Blizzak LM005", "url": "https://www.bridgestone.hu/" },
+      { "nev": "Hankook Winter i*cept", "url": "https://www.hankooktire.com/hu/" }
+    ]
+  },
+
+  "markak": [
+    {
+      "nev": "Audi",
+      "modellek": ["A3", "A4", "A6", "Q5"],
+      "leiras": "A duplakuplungos váltók (S tronic) nyomatékbírása véges, ezért hangolás előtt ellenőrizni kell, melyik váltó van az autóban. Hátul sok modellen elektromos kézifék van, ezért a hátsó fékek szervizeléséhez diagnosztikai műszer kell."
+    },
+    {
+      "nev": "BMW",
+      "modellek": ["1-es", "3-as", "5-ös", "X3"],
+      "leiras": "A fékbetét kopásérzékelője a betéttel együtt cserélendő, a csere után a kopásjelzést nullázni kell. A turbós motoroknál hangolás előtt különösen számít a hűtés és az olaj állapota."
+    },
+    {
+      "nev": "Škoda",
+      "modellek": ["Fabia", "Octavia", "Superb", "Kodiaq"],
+      "leiras": "A Volkswagen-csoport technikáját használja, ezért ugyanaz érvényes, mint az Audinál: a váltó típusa és a hátsó elektromos kézifék számít. Fékalkatrésznél a pontos évjárat és motorváltozat fontos, mert egy típuson belül több tárcsaméret létezik."
+    },
+    {
+      "nev": "Opel",
+      "modellek": ["Corsa", "Astra", "Insignia", "Zafira"],
+      "leiras": "Több újabb modellen (például az Insignián) hátul elektromos kézifék van. Hangolás előtt a turbó és a töltőnyomás-szabályozás állapotát érdemes átnézetni, mert a teljesítménynövelés ezeket terheli leginkább."
+    }
+  ],
+
+  "fekalkatreszek": [
+    { "id": "disc",    "nev": "Féktárcsa",         "megjegyzes": "tengelyenként 2 db",    "ar": 25000, "egyseg": "db",    "mennyiseg": { "opciok": [2, 4],       "alap": 2 } },
+    { "id": "pad",     "nev": "Fékbetét",          "megjegyzes": "tengelyenként 1 szett", "ar": 15000, "egyseg": "szett", "mennyiseg": { "opciok": [1, 2],       "alap": 1 } },
+    { "id": "caliper", "nev": "Féknyereg",         "megjegyzes": "általában párban",      "ar": 40000, "egyseg": "db",    "mennyiseg": { "opciok": [1, 2, 3, 4], "alap": 2 } },
+    { "id": "fluid",   "nev": "Fékfolyadék csere", "megjegyzes": "",                      "ar": 10000 }
+  ],
+
+  "arajanlat": [
+    { "id": "stage1",  "nev": "Chiptuning Stage 1" },
+    { "id": "stage2",  "nev": "Kipufogó és szívósor Stage 2" },
+    { "id": "turbo",   "nev": "Turbó csere / beépítés" },
+    { "id": "tyres",   "nev": "Gumiszerelés és centírozás (4 db)", "ar": 16000 },
+    { "id": "service", "nev": "Alapszerviz: olaj- és szűrőcsere",  "ar": 30000 }
+  ]
+}
